@@ -20,9 +20,6 @@ reset_knockout.py
 reset_pins.py
 test_calculations.py
 
-# Excel import files (chứa thông tin nhân viên)
-*.xlsx
-
 # OS files
 .DS_Store
 Thumbs.db
