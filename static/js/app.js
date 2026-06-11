@@ -482,7 +482,7 @@ function showToast(message, type = "success") {
 
 // --- FORMAT VND ---
 function formatVND(value) {
-    return new Intl.NumberFormat('vi-VN').format(value) + 'đ';
+    return new Intl.NumberFormat('en-US').format(value) + ' pts';
 }
 
 // --- RENDER HEADER STATS ---

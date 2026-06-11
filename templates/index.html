@@ -24,7 +24,6 @@
     <div id="login-overlay" class="login-overlay">
         <div class="login-card glass-card animate-fade-in">
             <div class="login-logo">
-                <img src="/static/images/logo.png" alt="Logo" class="login-logo-img">
                 <h1>FIFA WORLD CUP 2026</h1>
                 <p class="subtitle">DỰ ĐOÁN KẾT QUẢ CÁC TRẬN ĐẤU</p>
             </div>
@@ -80,10 +79,10 @@
             <!-- TOP STATS CARDS -->
             <section class="stats-grid animate-fade-in">
                 <div class="stat-card glass-card border-gold">
-                    <div class="stat-icon gold-glow"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="stat-icon gold-glow"><i class="fa-solid fa-award"></i></div>
                     <div class="stat-data">
-                        <span class="stat-label">TỔNG QUỸ DỰ KIẾN</span>
-                        <span id="total-fund-display" class="stat-value text-gold">0đ</span>
+                        <span class="stat-label">TỔNG ĐIỂM DỰ KIẾN</span>
+                        <span id="total-fund-display" class="stat-value text-gold">0 points</span>
                     </div>
                 </div>
                 <div class="stat-card glass-card border-cyan">
@@ -113,8 +112,8 @@
                 <!-- LEADERBOARD CARD -->
                 <div class="card glass-card animate-fade-in">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-ranking-star text-gold"></i> Bảng Xếp Hạng Đóng Góp Quỹ</h2>
-                        <span class="subtitle-text">Thống kê số tiền đóng góp từ các trận đã kết thúc</span>
+                        <h2><i class="fa-solid fa-ranking-star text-gold"></i> Bảng Xếp Hạng Tổng Điểm</h2>
+                        <span class="subtitle-text">Thống kê số điểm tích lũy từ các trận đã kết thúc</span>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
@@ -124,10 +123,10 @@
                                         <th class="text-center">Hạng</th>
                                         <th>Thành viên</th>
                                         <th class="text-center">Đã dự đoán</th>
-                                        <th class="text-center">Thắng (0đ)</th>
+                                        <th class="text-center">Thắng (0 pt)</th>
                                         <th class="text-center">Hòa (1/2)</th>
                                         <th class="text-center">Thua (1/1)</th>
-                                        <th class="text-right">Dự kiến nộp</th>
+                                        <th class="text-right">Điểm dự kiến</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboard-body">
@@ -163,9 +162,9 @@
                             <div class="rule-text">
                                 <strong>Cách tính điểm khi chọn một đội bóng:</strong>
                                 <ul>
-                                    <li>Nếu đội đó <strong>Thắng</strong>: Người chơi <strong>không phải nộp tiền (0đ)</strong>.</li>
-                                    <li>Nếu đội đó <strong>Thua</strong>: Người chơi phải nộp số tiền đặt cược tương ứng của vòng đấu đó.</li>
-                                    <li>Nếu trận đấu đó <strong>Hòa</strong>: Người chơi chịu <strong>1/2 số tiền</strong> tương ứng của trận đấu.</li>
+                                    <li>Nếu đội đó <strong>Thắng</strong>: Người chơi <strong>không nhận điểm phạt (0 pt)</strong>.</li>
+                                    <li>Nếu đội đó <strong>Thua</strong>: Người chơi nhận số điểm phạt tương ứng của vòng đấu đó.</li>
+                                    <li>Nếu trận đấu đó <strong>Hòa</strong>: Người chơi nhận <strong>1/2 số điểm phạt</strong> tương ứng của trận đấu.</li>
                                 </ul>
                             </div>
                         </div>
@@ -175,8 +174,8 @@
                             <div class="rule-text">
                                 <strong>Cách tính điểm khi chọn kết quả Hòa:</strong>
                                 <ul>
-                                    <li>Nếu trận đấu đó <strong>Hòa</strong>: Người chơi <strong>không mất tiền (0đ)</strong>.</li>
-                                    <li>Nếu trận đấu có <strong>Thắng - Thua</strong>: Người chơi phải <strong>nộp đủ số tiền</strong> quy định.</li>
+                                    <li>Nếu trận đấu đó <strong>Hòa</strong>: Người chơi <strong>không nhận điểm phạt (0 pt)</strong>.</li>
+                                    <li>Nếu trận đấu có <strong>Thắng - Thua</strong>: Người chơi nhận <strong>đủ số điểm phạt</strong> quy định.</li>
                                 </ul>
                             </div>
                         </div>
@@ -185,7 +184,7 @@
                             <div class="rule-num text-gold">03</div>
                             <div class="rule-text">
                                 <strong>Quy định về sửa đổi/vi phạm:</strong>
-                                <span>Tất cả các trường hợp tự ý tẩy xóa tên đội đã chọn sau khi đã khóa, BTC sẽ tính người chơi thua cuộc luôn trận đấu đó và phải nộp đủ tiền.</span>
+                                <span>Tất cả các trường hợp tự ý tẩy xóa tên đội đã chọn sau khi đã khóa, BTC sẽ tính người chơi thua cuộc luôn trận đấu đó và nhận đủ điểm phạt.</span>
                             </div>
                         </div>
 
@@ -193,21 +192,21 @@
                             <div class="rule-num text-gold">04</div>
                             <div class="rule-text">
                                 <strong>Không tham gia dự đoán:</strong>
-                                <span>Trước giờ bóng lăn mỗi trận đấu, nếu BTC không nhận được bất kỳ thông tin chọn đội nào thông qua tin nhắn hoặc hệ thống thì coi như người chơi thua cuộc và phải nộp đủ số tiền.</span>
+                                <span>Trước giờ bóng lăn mỗi trận đấu, nếu BTC không nhận được bất kỳ thông tin chọn đội nào thông qua tin nhắn hoặc hệ thống thì coi như người chơi thua cuộc và nhận đủ số điểm phạt.</span>
                             </div>
                         </div>
 
                         <div class="rule-item">
                             <div class="rule-num text-gold">05</div>
                             <div class="rule-text">
-                                <strong>Biểu phí đóng góp theo từng Vòng đấu:</strong>
+                                <strong>Số điểm phạt theo từng Vòng đấu:</strong>
                                 <div class="price-table">
-                                    <div class="price-row"><span>Vòng bảng:</span><strong>12,000 VND / trận</strong></div>
-                                    <div class="price-row"><span>Vòng 32:</span><strong>25,000 VND / trận</strong></div>
-                                    <div class="price-row"><span>Vòng 1/16:</span><strong>50,000 VND / trận</strong></div>
-                                    <div class="price-row"><span>Tứ Kết:</span><strong>70,000 VND / trận</strong></div>
-                                    <div class="price-row"><span>Bán Kết & Tranh hạng 3:</span><strong>100,000 VND / trận</strong></div>
-                                    <div class="price-row"><span>Chung Kết:</span><strong>120,000 VND / trận</strong></div>
+                                    <div class="price-row"><span>Vòng bảng:</span><strong>12,000 points / trận</strong></div>
+                                    <div class="price-row"><span>Vòng 32:</span><strong>25,000 points / trận</strong></div>
+                                    <div class="price-row"><span>Vòng 1/16:</span><strong>50,000 points / trận</strong></div>
+                                    <div class="price-row"><span>Tứ Kết:</span><strong>70,000 points / trận</strong></div>
+                                    <div class="price-row"><span>Bán Kết & Tranh hạng 3:</span><strong>100,000 points / trận</strong></div>
+                                    <div class="price-row"><span>Chung Kết:</span><strong>120,000 points / trận</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -223,8 +222,8 @@
                         <div class="rule-item">
                             <div class="rule-num text-gold">07</div>
                             <div class="rule-text">
-                                <strong>Mục đích sử dụng quỹ:</strong>
-                                <span class="highlight-box">Toàn bộ số phần thưởng và tiền quỹ thu về sẽ được tổ chức liên hoan công ty. Mọi người hãy tham gia thật thoải mái, vui vẻ và hết mình nhé! 🎉</span>
+                                <strong>Mục đích giải đấu:</strong>
+                                <span class="highlight-box">Giải đấu mang tính chất vui vẻ, giao lưu giải trí là chính. Mọi người hãy tham gia thật thoải mái, vui vẻ và hết mình nhé! 🎉</span>
                             </div>
                         </div>
                     </div>
