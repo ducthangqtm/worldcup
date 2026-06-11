@@ -1,0 +1,10 @@
+{
+  "players": [],
+  "matches": [],
+  "predictions": [],
+  "team_info": {},
+  "config": {
+    "admin_pin": "Admin@123",
+    "last_espn_sync": 0
+  }
+}

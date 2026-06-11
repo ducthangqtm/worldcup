@@ -1,0 +1,25 @@
+[Unit]
+Description=WC2026 Office Pool - Flask App via Waitress
+After=network.target
+
+[Service]
+# Đổi 'ubuntu' thành user trên server của bạn
+User=ubuntu
+Group=ubuntu
+
+WorkingDirectory=/var/www/wc2026
+ExecStart=/var/www/wc2026/venv/bin/python wsgi.py
+
+# Tự restart nếu bị crash
+Restart=always
+RestartSec=5
+
+# Biến môi trường
+Environment="FLASK_SECRET_KEY=change_this_to_a_strong_random_key"
+
+# Log ra journald
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

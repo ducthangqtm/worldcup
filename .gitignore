@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+venv/
+env/
+.env/
+
+# Database (chứa dữ liệu thật - không đẩy lên git)
+db.json
+
+# Scripts tạm thời
+simulate_tournament.py
+reset_data.py
+reset_knockout.py
+reset_pins.py
+test_calculations.py
+
+# Excel import files (chứa thông tin nhân viên)
+*.xlsx
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log

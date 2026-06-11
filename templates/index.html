@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự Đoán Bóng Đá World Cup 2026 - Công Ty</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+    <div class="stadium-bg"></div>
+    <div class="glow-effect glow-purple"></div>
+    <div class="glow-effect glow-cyan"></div>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-card glass-card animate-fade-in">
+            <div class="login-logo">
+                <img src="/static/images/logo.png" alt="Logo" class="login-logo-img">
+                <h1>FIFA WORLD CUP 2026</h1>
+                <p class="subtitle">DỰ ĐOÁN KẾT QUẢ CÁC TRẬN ĐẤU</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username"><i class="fa-solid fa-user"></i> Tên tài khoản (Username)</label>
+                    <input type="text" id="login-username" placeholder="Ví dụ: kienbc" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-pin"><i class="fa-solid fa-key"></i> Mã PIN (4 chữ số)</label>
+                    <input type="password" id="login-pin" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]{4}" required>
+                </div>
+                
+                <div id="login-error" class="error-message hidden"></div>
+                
+                <!-- Setup PIN note -->
+                <div id="pin-setup-note" class="info-note">
+                    <i class="fa-solid fa-info-circle"></i> <strong>Lưu ý:</strong> Mã PIN mặc định là <strong>1234</strong>. Sau khi đăng nhập thành công, bạn sẽ được yêu cầu đổi mã PIN riêng để bảo mật tài khoản.
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Đăng Nhập <i class="fa-solid fa-right-to-bracket"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="app-container" class="app-container hidden">
+        
+        <!-- STICKY TOP CONTAINER -->
+        <div class="sticky-header-container">
+            <!-- HEADER -->
+            <header class="main-header">
+                <div class="header-user">
+                    <div class="user-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+                    <div class="user-info">
+                        <span class="user-welcome">Xin chào,</span>
+                        <span id="player-display-name" class="user-name">Người chơi</span>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button id="btn-admin-trigger" class="btn btn-icon btn-dark" title="Bảng điều khiển Admin">
+                        <i class="fa-solid fa-lock-open text-purple"></i>
+                    </button>
+                    <button id="btn-logout" class="btn btn-icon btn-danger" title="Đăng xuất">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- TOP STATS CARDS -->
+            <section class="stats-grid animate-fade-in">
+                <div class="stat-card glass-card border-gold">
+                    <div class="stat-icon gold-glow"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="stat-data">
+                        <span class="stat-label">TỔNG QUỸ DỰ KIẾN</span>
+                        <span id="total-fund-display" class="stat-value text-gold">0đ</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card border-cyan">
+                    <div class="stat-icon cyan-glow"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="stat-data">
+                        <span class="stat-label">TRẬN ĐẤU ĐÃ KẾT THÚC</span>
+                        <span id="finished-matches-display" class="stat-value text-cyan">0 / 0</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- MAIN TABS CONTAINER -->
+        <main class="content-area">
+            
+            <!-- TAB 1: DASHBOARD (Trang Chủ - Matches) -->
+            <div id="tab-dashboard" class="tab-content">
+
+
+                <div id="matches-list-container" class="matches-list-container">
+                    <!-- Matches grouped or sorted chronologically -->
+                </div>
+            </div>
+
+            <!-- TAB 2: MATCHES (Xếp Hạng - Leaderboard) -->
+            <div id="tab-matches" class="tab-content hidden">
+                <!-- LEADERBOARD CARD -->
+                <div class="card glass-card animate-fade-in">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-ranking-star text-gold"></i> Bảng Xếp Hạng Đóng Góp Quỹ</h2>
+                        <span class="subtitle-text">Thống kê số tiền đóng góp từ các trận đã kết thúc</span>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Hạng</th>
+                                        <th>Thành viên</th>
+                                        <th class="text-center">Đã dự đoán</th>
+                                        <th class="text-center">Thắng (0đ)</th>
+                                        <th class="text-center">Hòa (1/2)</th>
+                                        <th class="text-center">Thua (1/1)</th>
+                                        <th class="text-right">Dự kiến nộp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body">
+                                    <!-- Dynamic rows loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UPCOMING MATCHES QUICK ACTION -->
+                <div class="card glass-card margin-top-20 animate-fade-in">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-bolt text-purple"></i> Các Trận Đấu Sắp Diễn Ra</h2>
+                        <span class="subtitle-text">Dự đoán nhanh các trận sắp đóng cổng bình chọn</span>
+                    </div>
+                    <div id="upcoming-matches-container" class="card-body quick-matches-list">
+                        <!-- Dynamic list of upcoming matches -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: RULES -->
+            <div id="tab-rules" class="tab-content hidden">
+                <div class="card glass-card animate-fade-in">
+                    <div class="card-header border-bottom">
+                        <h2 class="text-center"><i class="fa-solid fa-scale-balanced text-gold"></i> ĐIỀU LỆ VÀ NỘI QUY BÌNH CHỌN</h2>
+                        <p class="text-center text-purple subtitle-text">Nội quy áp dụng cho giải đấu World Cup 2026 Office Pool</p>
+                    </div>
+                    <div class="card-body rules-list">
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">01</div>
+                            <div class="rule-text">
+                                <strong>Cách tính điểm khi chọn một đội bóng:</strong>
+                                <ul>
+                                    <li>Nếu đội đó <strong>Thắng</strong>: Người chơi <strong>không phải nộp tiền (0đ)</strong>.</li>
+                                    <li>Nếu đội đó <strong>Thua</strong>: Người chơi phải nộp số tiền đặt cược tương ứng của vòng đấu đó.</li>
+                                    <li>Nếu trận đấu đó <strong>Hòa</strong>: Người chơi chịu <strong>1/2 số tiền</strong> tương ứng của trận đấu.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">02</div>
+                            <div class="rule-text">
+                                <strong>Cách tính điểm khi chọn kết quả Hòa:</strong>
+                                <ul>
+                                    <li>Nếu trận đấu đó <strong>Hòa</strong>: Người chơi <strong>không mất tiền (0đ)</strong>.</li>
+                                    <li>Nếu trận đấu có <strong>Thắng - Thua</strong>: Người chơi phải <strong>nộp đủ số tiền</strong> quy định.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">03</div>
+                            <div class="rule-text">
+                                <strong>Quy định về sửa đổi/vi phạm:</strong>
+                                <span>Tất cả các trường hợp tự ý tẩy xóa tên đội đã chọn sau khi đã khóa, BTC sẽ tính người chơi thua cuộc luôn trận đấu đó và phải nộp đủ tiền.</span>
+                            </div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">04</div>
+                            <div class="rule-text">
+                                <strong>Không tham gia dự đoán:</strong>
+                                <span>Trước giờ bóng lăn mỗi trận đấu, nếu BTC không nhận được bất kỳ thông tin chọn đội nào thông qua tin nhắn hoặc hệ thống thì coi như người chơi thua cuộc và phải nộp đủ số tiền.</span>
+                            </div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">05</div>
+                            <div class="rule-text">
+                                <strong>Biểu phí đóng góp theo từng Vòng đấu:</strong>
+                                <div class="price-table">
+                                    <div class="price-row"><span>Vòng bảng:</span><strong>12,000 VND / trận</strong></div>
+                                    <div class="price-row"><span>Vòng 32:</span><strong>25,000 VND / trận</strong></div>
+                                    <div class="price-row"><span>Vòng 1/16:</span><strong>50,000 VND / trận</strong></div>
+                                    <div class="price-row"><span>Tứ Kết:</span><strong>70,000 VND / trận</strong></div>
+                                    <div class="price-row"><span>Bán Kết & Tranh hạng 3:</span><strong>100,000 VND / trận</strong></div>
+                                    <div class="price-row"><span>Chung Kết:</span><strong>120,000 VND / trận</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">06</div>
+                            <div class="rule-text">
+                                <strong>Hạn chót khóa bình chọn (Deadline):</strong>
+                                <span>Hệ thống bình chọn tự động sẽ <strong>đóng cổng vào lúc 10:00 PM (22h đêm) ngày hôm trước</strong> khi trận đấu diễn ra. Mọi dự đoán sau giờ này sẽ không được ghi nhận và tính là không bình chọn (phạt thua).</span>
+                            </div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-num text-gold">07</div>
+                            <div class="rule-text">
+                                <strong>Mục đích sử dụng quỹ:</strong>
+                                <span class="highlight-box">Toàn bộ số phần thưởng và tiền quỹ thu về sẽ được tổ chức liên hoan công ty. Mọi người hãy tham gia thật thoải mái, vui vẻ và hết mình nhé! 🎉</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: STANDINGS -->
+            <div id="tab-standings" class="tab-content hidden">
+                <!-- Sub-tabs for Standings & Bracket -->
+                <div class="sub-tabs-bar glass-card animate-fade-in">
+                    <button class="sub-tab-btn active" id="btn-sub-groups">
+                        <i class="fa-solid fa-table-cells"></i> Vòng Bảng
+                    </button>
+                    <button class="sub-tab-btn" id="btn-sub-bracket">
+                        <i class="fa-solid fa-sitemap"></i> Sơ Đồ Knockout
+                    </button>
+                </div>
+
+                <!-- Group Standings container -->
+                <div id="standings-container" class="standings-grid animate-fade-in">
+                    <!-- Dynamic group boards will be loaded here -->
+                </div>
+
+                <!-- Bracket container (hidden by default) -->
+                <div id="bracket-container" class="bracket-container hidden animate-fade-in">
+                    <div class="bracket-nav-pills">
+                        <button class="bracket-pill-btn active" onclick="scrollToBracketSection('sect-r32')">Vòng 32</button>
+                        <button class="bracket-pill-btn" onclick="scrollToBracketSection('sect-r16')">Vòng 16</button>
+                        <button class="bracket-pill-btn" onclick="scrollToBracketSection('sect-qf')">Tứ Kết</button>
+                        <button class="bracket-pill-btn" onclick="scrollToBracketSection('sect-sf')">Bán Kết</button>
+                        <button class="bracket-pill-btn" onclick="scrollToBracketSection('sect-final')">Chung Kết</button>
+                    </div>
+                    <div class="bracket-vertical-area" id="bracket-vertical-area">
+                        <!-- Dynamic bracket sections loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- TAB NAVIGATION (BOTTOM ON MOBILE) -->
+        <nav class="bottom-nav glass-card">
+            <button id="nav-dashboard" class="nav-item active">
+                <i class="fa-solid fa-futbol"></i>
+                <span>Trang Chủ</span>
+            </button>
+            <button id="nav-matches" class="nav-item">
+                <i class="fa-solid fa-ranking-star"></i>
+                <span>Xếp Hạng</span>
+            </button>
+            <button id="nav-standings" class="nav-item">
+                <i class="fa-solid fa-table-list"></i>
+                <span>Bảng Đấu</span>
+            </button>
+            <button id="nav-rules" class="nav-item">
+                <i class="fa-solid fa-book"></i>
+                <span>Điều Lệ</span>
+            </button>
+        </nav>
+    </div>
+
+
+
+    <!-- ADMIN PANEL OVERLAY / DRAWER -->
+    <div id="admin-overlay" class="admin-overlay">
+        <div class="admin-drawer glass-card animate-slide-in-right">
+            <div class="admin-header">
+                <h2><i class="fa-solid fa-gears text-purple"></i> Quản Trị Hệ Thống</h2>
+                <button id="btn-admin-close" class="btn btn-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <!-- Admin Lock/Unlock Gate -->
+            <div id="admin-gate">
+                <form id="admin-auth-form">
+                    <p class="gate-desc">Nhập mã PIN Admin để tiếp tục</p>
+                    <div class="form-group">
+                        <input type="password" id="admin-pin" placeholder="Nhập mã PIN Admin" required>
+                    </div>
+                    <div id="admin-auth-error" class="error-message hidden"></div>
+                    <button type="submit" class="btn btn-purple btn-block">Xác Thực</button>
+                </form>
+            </div>
+
+            <!-- Admin Real Controls (hidden until unlocked) -->
+            <div id="admin-controls" class="admin-controls-content hidden">
+                <div class="admin-tabs">
+                    <button class="admin-tab-btn active" data-admin-tab="admin-matches-tab">Trận Đấu</button>
+                    <button class="admin-tab-btn" data-admin-tab="admin-players-tab">Nhân Viên</button>
+                    <button class="admin-tab-btn" data-admin-tab="admin-override-tab">Bình Chọn</button>
+                </div>
+
+                <!-- ADMIN MATCHES TAB -->
+                <div id="admin-matches-tab" class="admin-tab-content">
+                    <div class="admin-action-bar">
+                        <button id="btn-espn-sync" class="btn btn-primary btn-sm"><i class="fa-solid fa-rotate"></i> Đồng bộ ESPN</button>
+                    </div>
+                    <div class="admin-list" id="admin-matches-list">
+                        <!-- Match updates with score fields -->
+                    </div>
+                </div>
+
+                <!-- ADMIN PLAYERS TAB -->
+                <div id="admin-players-tab" class="admin-tab-content hidden">
+                    <form id="admin-add-player-form" class="form-inline">
+                        <input type="text" id="new-player-name" placeholder="Tên nhân viên mới..." required>
+                        <button type="submit" class="btn btn-purple"><i class="fa-solid fa-plus"></i> Thêm</button>
+                    </form>
+                    <div class="admin-list" id="admin-players-list">
+                        <!-- Employee list with delete/reset PIN buttons -->
+                    </div>
+                </div>
+
+                <!-- ADMIN OVERRIDE TAB -->
+                <div id="admin-override-tab" class="admin-tab-content hidden">
+                    <div class="form-group">
+                        <label for="override-match-select">Chọn trận đấu:</label>
+                        <select id="override-match-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="override-player-select">Chọn nhân viên:</label>
+                        <select id="override-player-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Lựa chọn thay thế:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="override-choice" value="teamA" id="choiceA"> <span id="override-teamA-label">Đội A</span></label>
+                            <label><input type="radio" name="override-choice" value="draw"> Hòa</label>
+                            <label><input type="radio" name="override-choice" value="teamB" id="choiceB"> <span id="override-teamB-label">Đội B</span></label>
+                            <label><input type="radio" name="override-choice" value="none" checked> Trống (Chưa chọn)</label>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="override-violation"> <span class="text-danger"><strong>Đánh dấu TẨY XÓA / VI PHẠM (Phạt thua ngay)</strong></span></label>
+                    </div>
+                    <button id="btn-save-override" class="btn btn-purple btn-block">Cập Nhật Bình Chọn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CHANGE PIN FORCED -->
+    <div id="change-pin-modal" class="modal" style="display:none; z-index: 1005;">
+        <div class="modal-content glass-card animate-scale-up">
+            <div class="login-logo">
+                <i class="fa-solid fa-key text-purple"></i>
+                <h2>Đổi Mã PIN Cá Nhân</h2>
+                <p class="subtitle" style="letter-spacing: 1px; font-size: 0.7rem;">BẮT BUỘC ĐỂ BẢO MẬT TÀI KHOẢN</p>
+            </div>
+            <p class="text-center text-secondary" style="margin-bottom:15px; font-size: 0.82rem;">
+                Tài khoản của bạn đang sử dụng mã PIN mặc định <strong>1234</strong>. Vui lòng thiết lập mã PIN 4 chữ số mới để tiếp tục sử dụng.
+            </p>
+            <form id="change-pin-form">
+                <div class="form-group">
+                    <label for="new-pin"><i class="fa-solid fa-lock"></i> Mã PIN mới (4 chữ số)</label>
+                    <input type="password" id="new-pin" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]{4}" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-new-pin"><i class="fa-solid fa-lock"></i> Xác nhận mã PIN mới</label>
+                    <input type="password" id="confirm-new-pin" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]{4}" required>
+                </div>
+                <div id="change-pin-error" class="error-message hidden"></div>
+                <button type="submit" class="btn btn-purple btn-block">Xác Nhận & Đổi PIN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- JS Files -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
