@@ -698,4 +698,4 @@ if __name__ == '__main__':
     # Initial score sync on startup in background
     print("Initial startup ESPN sync launch...")
     threading.Thread(target=sync_scores_from_espn, kwargs={"force": False}).start()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5004, debug=True)

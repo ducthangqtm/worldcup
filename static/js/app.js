@@ -65,7 +65,18 @@ async function refreshData() {
             }
             throw new Error("Cannot fetch data");
         }
-        state.data = await response.json();
+        const newData = await response.json();
+        
+        // Chỉ vẽ lại UI khi dữ liệu thực tế có thay đổi để tránh nhấp nháy hoặc tải lại giao diện liên tục
+        const currentCompare = state.data ? { ...state.data, current_time: null } : null;
+        const newCompare = { ...newData, current_time: null };
+        
+        if (state.data && JSON.stringify(currentCompare) === JSON.stringify(newCompare)) {
+            state.data.current_time = newData.current_time;
+            return true;
+        }
+        
+        state.data = newData;
         
         // Check if user needs to change PIN
         if (state.data.needs_pin_change) {
