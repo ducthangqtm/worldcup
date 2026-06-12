@@ -528,6 +528,19 @@ function renderHeader() {
     document.getElementById("player-display-name").textContent = state.currentUser ? state.currentUser.name : "Người chơi";
     document.getElementById("total-fund-display").textContent = formatVND(state.data.total_fund);
     
+    // Tìm điểm phạt cá nhân của người dùng hiện tại từ bảng xếp hạng
+    let myPoints = 0;
+    if (state.currentUser && state.data.leaderboard) {
+        const myStats = state.data.leaderboard.find(p => p.id === state.currentUser.player_id);
+        if (myStats) {
+            myPoints = myStats.total_contribution;
+        }
+    }
+    const myPointsEl = document.getElementById("my-points-display");
+    if (myPointsEl) {
+        myPointsEl.textContent = formatVND(myPoints);
+    }
+    
     const finishedMatchesCount = state.data.matches.filter(m => m.finished).length;
     const totalMatchesCount = state.data.matches.length;
     document.getElementById("finished-matches-display").textContent = `${finishedMatchesCount} / ${totalMatchesCount}`;
