@@ -102,6 +102,16 @@
             <div id="tab-dashboard" class="tab-content">
 
 
+                <!-- SUB TABS FOR MATCHES -->
+                <div class="sub-tabs-bar glass-card animate-fade-in" style="margin-bottom: 20px;">
+                    <button class="sub-tab-btn active" id="btn-match-upcoming">
+                        <i class="fa-solid fa-calendar-days"></i> Trận sắp diễn ra
+                    </button>
+                    <button class="sub-tab-btn" id="btn-match-history">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử trận đấu
+                    </button>
+                </div>
+
                 <div id="matches-list-container" class="matches-list-container">
                     <!-- Matches grouped or sorted chronologically -->
                 </div>
@@ -129,7 +139,7 @@
                                         <th class="text-right">Điểm dự kiến</th>
                                     </tr>
                                 </thead>
-                                <tbody id="leaderboard-body">
+                                <tbody id="leaderboard-body-rank">
                                     <!-- Dynamic rows loaded here -->
                                 </tbody>
                             </table>
@@ -201,12 +211,12 @@
                             <div class="rule-text">
                                 <strong>Số điểm phạt theo từng Vòng đấu:</strong>
                                 <div class="price-table">
-                                    <div class="price-row"><span>Vòng bảng:</span><strong>12,000 points / trận</strong></div>
-                                    <div class="price-row"><span>Vòng 32:</span><strong>25,000 points / trận</strong></div>
-                                    <div class="price-row"><span>Vòng 1/16:</span><strong>50,000 points / trận</strong></div>
-                                    <div class="price-row"><span>Tứ Kết:</span><strong>70,000 points / trận</strong></div>
-                                    <div class="price-row"><span>Bán Kết & Tranh hạng 3:</span><strong>100,000 points / trận</strong></div>
-                                    <div class="price-row"><span>Chung Kết:</span><strong>120,000 points / trận</strong></div>
+                                    <div class="price-row"><span>Vòng bảng:</span><strong>12 points / trận</strong></div>
+                                    <div class="price-row"><span>Vòng 32:</span><strong>25 points / trận</strong></div>
+                                    <div class="price-row"><span>Vòng 1/16:</span><strong>50 points / trận</strong></div>
+                                    <div class="price-row"><span>Tứ Kết:</span><strong>70 points / trận</strong></div>
+                                    <div class="price-row"><span>Bán Kết & Tranh hạng 3:</span><strong>100 points / trận</strong></div>
+                                    <div class="price-row"><span>Chung Kết:</span><strong>120 points / trận</strong></div>
                                 </div>
                             </div>
                         </div>

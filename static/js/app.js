@@ -4,6 +4,7 @@ let state = {
     adminToken: null,
     data: null, // full API payload
     activeTab: 'dashboard',
+    activeDashboardTab: 'upcoming',
     activeAdminTab: 'admin-matches-tab',
     countdownInterval: null
 };
@@ -35,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshData().then(() => {
         setupEventListeners();
         startCountdownTimer();
+        
+        // Poll for updates every 30 seconds to support real-time score/points sync
+        setInterval(refreshData, 30000);
         
         if (state.currentUser) {
             showApp();
@@ -140,6 +144,23 @@ function switchAdminTab(tabId) {
     if (activeContent) activeContent.classList.remove("hidden");
 }
 
+function switchDashboardMatchTab(subTab) {
+    state.activeDashboardTab = subTab;
+    
+    const btnUpcoming = document.getElementById("btn-match-upcoming");
+    const btnHistory = document.getElementById("btn-match-history");
+    
+    if (subTab === "upcoming") {
+        btnUpcoming.classList.add("active");
+        btnHistory.classList.remove("active");
+    } else {
+        btnUpcoming.classList.remove("active");
+        btnHistory.classList.add("active");
+    }
+    
+    renderMatches();
+}
+
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
     // Tab switching
@@ -147,6 +168,10 @@ function setupEventListeners() {
     document.getElementById("nav-matches").addEventListener("click", () => switchTab("matches"));
     document.getElementById("nav-standings").addEventListener("click", () => switchTab("standings"));
     document.getElementById("nav-rules").addEventListener("click", () => switchTab("rules"));
+    
+    // Dashboard Match Sub-tab switching
+    document.getElementById("btn-match-upcoming").addEventListener("click", () => switchDashboardMatchTab("upcoming"));
+    document.getElementById("btn-match-history").addEventListener("click", () => switchDashboardMatchTab("history"));
     
     // Standings Sub-tab switching
     document.getElementById("btn-sub-groups").addEventListener("click", () => switchSubStandingsTab("groups"));
@@ -502,19 +527,19 @@ function renderDashboard() {
     if (!state.data) return;
     
     // 1. Leaderboard
-    const tbody = document.getElementById("leaderboard-body");
-    tbody.innerHTML = "";
+    const tbodyRank = document.getElementById("leaderboard-body-rank");
+    if (tbodyRank) tbodyRank.innerHTML = "";
     
     // Leaderboard sorting:
-    // 1. Correct predictions descending (highest correct is best)
-    // 2. Expected contribution ascending (lowest contribution is best)
+    // 1. Expected contribution descending (highest penalty points first)
+    // 2. Correct predictions descending
     // 3. Name alphabetically
     const sortedLeaderboard = [...state.data.leaderboard].sort((a, b) => {
+        if (b.total_contribution !== a.total_contribution) {
+            return b.total_contribution - a.total_contribution;
+        }
         if (b.correct !== a.correct) {
             return b.correct - a.correct;
-        }
-        if (a.total_contribution !== b.total_contribution) {
-            return a.total_contribution - b.total_contribution; // Lower contribution is higher rank
         }
         return a.name.localeCompare(b.name, 'vi');
     });
@@ -541,7 +566,7 @@ function renderDashboard() {
             <td class="text-center text-danger font-weight-600">${p.full_loss}</td>
             <td class="text-right table-fund-value">${formatVND(p.total_contribution)}</td>
         `;
-        tbody.appendChild(tr);
+        if (tbodyRank) tbodyRank.appendChild(tr);
     });
     
     // 2. Upcoming matches quick view (max 3)
@@ -590,6 +615,7 @@ function renderDashboard() {
         card.style.cursor = "pointer";
         card.addEventListener("click", () => {
             switchTab("dashboard");
+            switchDashboardMatchTab("upcoming");
             // Scroll to the specific match card
             setTimeout(() => {
                 const matchEl = document.getElementById(m.id);
@@ -613,14 +639,23 @@ function renderMatches() {
     const container = document.getElementById("matches-list-container");
     container.innerHTML = "";
     
-    // Hide finished matches
-    let filteredMatches = state.data.matches.filter(m => !m.finished);
-    
-    // Sort matches chronologically
-    filteredMatches.sort((a, b) => new Date(a.kickoff) - new Date(b.kickoff));
+    // Filter matches based on active dashboard sub-tab
+    let filteredMatches = [];
+    if (state.activeDashboardTab === "upcoming") {
+        filteredMatches = state.data.matches.filter(m => !m.finished);
+        // Sort upcoming matches chronologically (earliest first)
+        filteredMatches.sort((a, b) => new Date(a.kickoff) - new Date(b.kickoff));
+    } else {
+        filteredMatches = state.data.matches.filter(m => m.finished);
+        // Sort history matches reverse-chronologically (latest first)
+        filteredMatches.sort((a, b) => new Date(b.kickoff) - new Date(a.kickoff));
+    }
     
     if (filteredMatches.length === 0) {
-        container.innerHTML = '<div class="card glass-card padding-30 text-center text-muted">Không có trận đấu nào đang hoặc sắp diễn ra.</div>';
+        const message = state.activeDashboardTab === "upcoming" 
+            ? "Không có trận đấu nào đang hoặc sắp diễn ra." 
+            : "Chưa có trận đấu nào kết thúc.";
+        container.innerHTML = `<div class="card glass-card padding-30 text-center text-muted">${message}</div>`;
         return;
     }
     

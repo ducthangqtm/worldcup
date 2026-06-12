@@ -15,13 +15,13 @@ sync_lock = threading.Lock()
 
 # Stage to Price mapping
 STAGE_PRICES = {
-    "group-stage": 12000,
-    "round-of-32": 25000,
-    "round-of-16": 50000,
-    "quarterfinals": 70000,
-    "semifinals": 100000,
-    "3rd-place-match": 100000,
-    "final": 120000
+    "group-stage": 12,
+    "round-of-32": 25,
+    "round-of-16": 50,
+    "quarterfinals": 70,
+    "semifinals": 100,
+    "3rd-place-match": 100,
+    "final": 120
 }
 
 # Stage to Vietnamese name mapping
@@ -151,7 +151,7 @@ def calculate_predictions_and_funds(db_data):
     finished_matches = [m for m in db_data["matches"] if m.get("finished")]
 
     for match in finished_matches:
-        price = match.get("price", 12000)
+        price = match.get("price", 12)
         scoreA = int(match.get("scoreA", 0))
         scoreB = int(match.get("scoreB", 0))
         
@@ -276,7 +276,7 @@ def sync_scores_from_espn(force=False):
             completed = status_desc.get("completed", False) or status_name == "STATUS_FINAL"
 
             stage_slug = event.get("season", {}).get("slug", "group-stage")
-            price = STAGE_PRICES.get(stage_slug, 12000)
+            price = STAGE_PRICES.get(stage_slug, 12)
 
             # Check if match exists in DB
             match = matches_map.get(espn_id)
