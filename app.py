@@ -63,7 +63,7 @@ def save_db(data):
 def is_match_locked(kickoff_iso_utc, current_dt_utc=None):
     """
     Checks if a match is locked for predictions.
-    Rule: Closes at 10:00 PM (22:00) of the day before the match date in local time (GMT+7).
+    Rule: Closes at kickoff time.
     """
     try:
         # Standardize timezone offset
@@ -77,25 +77,10 @@ def is_match_locked(kickoff_iso_utc, current_dt_utc=None):
             # Default fallback if unparseable
             return True
 
-    # Convert kickoff to local time (GMT+7 for Vietnam)
-    gmt7 = timezone(timedelta(hours=7))
-    kickoff_local = kickoff_utc.astimezone(gmt7)
-    
-    # Match local date
-    match_date = kickoff_local.date()
-    
-    # Lock date is match local date - 1 day
-    lock_date = match_date - timedelta(days=1)
-    
-    # Lock time is 22:00 (10 PM) of that day in GMT+7
-    lock_local = datetime.combine(lock_date, datetime.min.time()).replace(tzinfo=gmt7) + timedelta(hours=22)
-    
     if current_dt_utc is None:
         current_dt_utc = datetime.now(timezone.utc)
         
-    current_local = current_dt_utc.astimezone(gmt7)
-    
-    return current_local >= lock_local
+    return current_dt_utc >= kickoff_utc
 
 # --- AUTH LOGIC ---
 def verify_player_token(player_id, token, db_data):

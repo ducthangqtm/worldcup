@@ -970,16 +970,8 @@ function startCountdownTimer() {
         document.querySelectorAll("[data-kickoff]").forEach(el => {
             const kickoffStr = el.dataset.kickoff;
             
-            // Calculate lock time (10:00 PM of previous day local time GMT+7)
-            const kickoffDate = new Date(kickoffStr);
-            
-            // Convert to GMT+7 Date object values
-            const offset = 7 * 60; // GMT+7 in minutes
-            const localKickoffTime = new Date(kickoffDate.getTime() + offset * 60 * 1000);
-            
-            // Lock date is 1 day before
-            const lockDate = new Date(localKickoffTime.getTime() - 24 * 60 * 60 * 1000);
-            lockDate.setUTCHours(15, 0, 0, 0); // 15:00 UTC is 22:00 (10 PM) GMT+7
+            // Lock date is kickoff date (closes right at kickoff time)
+            const lockDate = new Date(kickoffStr);
             
             const timeDiff = lockDate.getTime() - now.getTime();
             
